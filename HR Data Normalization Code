@@ -1,0 +1,85 @@
+## HR Data Normalization Code
+
+import pandas as pd
+
+file_path = r"D:\Python Project\HR Analsys\HR Data.xlsx" 
+df = pd.read_excel(file_path, sheet_name="HR data")
+
+# --- Normalized tables ---
+
+# Departments
+departments = df[["Department"]].drop_duplicates().reset_index(drop=True)
+departments["DepartmentID"] = departments.index + 1
+
+# Job Roles
+jobroles = df[["Job Role", "Job Level"]].drop_duplicates().reset_index(drop=True)
+jobroles["JobRoleID"] = jobroles.index + 1
+
+# Education Fields
+educationfields = df[["Education Field", "Education"]].drop_duplicates().reset_index(drop=True)
+educationfields["EducationFieldID"] = educationfields.index + 1
+
+# Employees
+employees = df[[
+    "Employee Number", "emp no", "Gender", "Age", "Marital Status",
+    "Department", "Job Role", "Education Field",
+    "Attrition", "CF_attrition label", "CF_current Employee", "CF_age band"
+]].copy()
+
+# merging
+employees = employees.merge(departments, on="Department", how="left")
+employees = employees.merge(jobroles, on="Job Role", how="left")
+employees = employees.merge(educationfields, on="Education Field", how="left")
+
+# The final structure
+employees = employees[[
+    "Employee Number", "emp no", "Gender", "Age", "Marital Status",
+    "DepartmentID", "JobRoleID", "EducationFieldID",
+    "Attrition", "CF_attrition label", "CF_current Employee", "CF_age band"
+]]
+
+# Performance
+performance = df[[
+    "Employee Number", "Performance Rating", "Job Satisfaction",
+    "Environment Satisfaction", "Relationship Satisfaction",
+    "Job Involvement", "Work Life Balance"
+]]
+
+# Salary
+salary = df[[
+    "Employee Number", "Monthly Income", "Monthly Rate",
+    "Hourly Rate", "Daily Rate", "Percent Salary Hike", "Stock Option Level"
+]]
+
+# Experience
+experience = df[[
+    "Employee Number", "Total Working Years", "Years At Company",
+    "Years In Current Role", "Years With Curr Manager",
+    "Years Since Last Promotion", "Num Companies Worked"
+]]
+
+# Training
+training = df[[
+    "Employee Number", "Training Times Last Year"
+]]
+
+# Travel
+travel = df[[
+    "Employee Number", "Business Travel", "Distance From Home",
+    "Over Time", "Over18"
+]]
+
+# --- Save to Excel ---
+output_path = r"D:\Python Project\HR Analsys\HR_Normalized.xlsx"
+with pd.ExcelWriter(output_path, engine="openpyxl") as writer:
+    employees.to_excel(writer, sheet_name="Employees", index=False)
+    departments.to_excel(writer, sheet_name="Departments", index=False)
+    jobroles.to_excel(writer, sheet_name="JobRoles", index=False)
+    educationfields.to_excel(writer, sheet_name="EducationFields", index=False)
+    performance.to_excel(writer, sheet_name="Performance", index=False)
+    salary.to_excel(writer, sheet_name="Salary", index=False)
+    experience.to_excel(writer, sheet_name="Experience", index=False)
+    training.to_excel(writer, sheet_name="Training", index=False)
+    travel.to_excel(writer, sheet_name="Travel", index=False)
+
+print("the has been created", output_path)
