@@ -1,0 +1,46 @@
+## Dashboard Code
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import squarify
+
+# Load data
+df = pd.read_excel(r"D:/Python Project/HR Analsys/HR Data.xlsx")
+
+plt.figure(figsize=(14,10))
+
+# 1) Pie Chart - Gender Distribution
+plt.subplot(2,2,1)
+df['Gender'].value_counts().plot.pie(
+    autopct='%1.1f%%',
+    startangle=90,
+    colors=['#66b3ff','#ff9999']
+)
+plt.title("Gender Distribution")
+plt.ylabel("")
+
+# 2) Attrition by Department
+plt.subplot(2,2,2)
+sns.countplot(data=df, x='Department', hue='Attrition', palette='Set2')
+plt.title("Attrition by Department")
+plt.xticks(rotation=45)
+
+# 3) Average Salary by Department
+plt.subplot(2,2,3)
+salary_data = df.groupby('Department')['Monthly Income'].mean().sort_values()
+sns.barplot(x=salary_data.index, y=salary_data.values, palette='Blues_r')
+plt.title("Average Salary by Department")
+plt.xticks(rotation=45)
+plt.ylabel("Average Monthly Income")
+
+# 4) Tree Map – Education Field by Department
+plt.subplot(2,2,4)
+tree_data = df.groupby(['Department','Education Field']).size().reset_index(name='Count')
+tree_data['Label'] = tree_data['Department'] + " - " + tree_data['Education Field']
+squarify.plot(sizes=tree_data['Count'], label=tree_data['Label'], alpha=0.8)
+plt.title("Education Field by Department (Treemap)")
+plt.axis('off')
+
+plt.tight_layout()
+plt.show()
