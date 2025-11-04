@@ -28,8 +28,9 @@ It showcases the full workflow from raw data to interactive visualization.
 ---
 
 ## 📷 Dashboard Preview
-<img width="1335" height="747" alt="image" src="https://github.com/user-attachments/assets/6e44bc60-aaf5-4fdf-9759-209b547a2b06" />
-<img width="1313" height="737" alt="image" src="https://github.com/user-attachments/assets/1740c598-5c53-49d9-8453-d5f295d36d91" />
+<img width="1327" height="750" alt="Screenshot 2025-11-04 123858" src="https://github.com/user-attachments/assets/d6528c1b-4867-416a-860f-fe236c2786ae" />
+<img width="1317" height="737" alt="Screenshot 2025-11-04 123920" src="https://github.com/user-attachments/assets/1d1316fc-0b97-4140-9cfa-13093f563dc3" />
+
 
 ---
 
